@@ -2,7 +2,6 @@ pandas
 datetime
 yfinance
 bottleneck
-matplotlib.pyplot
+matplotlib
 japanize_matplotlib
-matplotlib.dates
 streamlit
