@@ -14,18 +14,21 @@ import streamlit as st
 # ma は moving average。
 
 def moving_average(issue_name):
-  dt_today = dt.datetime.now().strftime('%Y-%m-%d')
-  df = yf.download(issue_name, 
-    start='2018-01-01', 
-    end=dt_today, 
-    progress=False,
-  )  
-  df[issue_name + '_3days_ma'] = bn.move_mean(df['Close'],window=3)
-  df = df.rename(columns={'Close': issue_name + '_close'})
-  return df.loc[:, [issue_name + '_close', issue_name + '_3days_ma']]
+    dt_today = dt.datetime.now().strftime('%Y-%m-%d')
+    df = yf.download(issue_name,
+                     start='2018-01-01',
+                     end=dt_today,
+                     progress=False,
+                     )
+    df[issue_name + '_3days_ma'] = bn.move_mean(df['Close'], window=3)
+    df = df.rename(columns={'Close': issue_name + '_close'})
+    return df.loc[:, [issue_name + '_close', issue_name + '_3days_ma']]
 
-ma_df = pd.merge(moving_average('^DJI'),moving_average('^N225'),on='Date',how='outer').sort_values('Date')
-ma_df = pd.merge(ma_df,moving_average('^GSPC'),on='Date',how='outer').sort_values('Date')
+
+ma_df = pd.merge(moving_average('^DJI'), moving_average(
+    '^N225'), on='Date', how='outer').sort_values('Date')
+ma_df = pd.merge(ma_df, moving_average('^GSPC'), on='Date',
+                 how='outer').sort_values('Date')
 
 ma_df_filled = ma_df.fillna(method='ffill')
 
@@ -35,20 +38,23 @@ fig = plt.figure()
 
 ax1 = fig.add_subplot()
 ax2 = ax1.twinx()
-ax1.plot(ma_df_filled.index,ma_df_filled['^DJI_3days_ma'],color = "orange",label='NYダウ')
-ax1.plot(ma_df_filled.index,ma_df_filled['^N225_3days_ma'],color = "blue",label='日経225')
-ax2.plot(ma_df_filled.index,ma_df_filled['^GSPC_3days_ma'],color = "green",label='S&P500')
+ax1.plot(ma_df_filled.index,
+         ma_df_filled['^DJI_3days_ma'], color="orange", label='NYダウ')
+ax1.plot(ma_df_filled.index,
+         ma_df_filled['^N225_3days_ma'], color="blue", label='日経225')
+ax2.plot(ma_df_filled.index,
+         ma_df_filled['^GSPC_3days_ma'], color="green", label='S&P500')
 locator = mdates.MonthLocator(bymonthday=15, interval=2)
 ax1.xaxis.set_major_locator(locator)
 ax1.xaxis.set_tick_params(rotation=45)
 
-ax1.set_ylabel("NYダウ、日経平均")  #y1軸ラベル
-ax2.set_ylabel("S&P500")  #y2軸ラベル
+ax1.set_ylabel("NYダウ/日経225")  # y1軸ラベル
+ax2.set_ylabel("S&P500")  # y2軸ラベル
 
-#凡例
+# 凡例
 h1, l1 = ax1.get_legend_handles_labels()
 h2, l2 = ax2.get_legend_handles_labels()
-ax1.legend(h1+h2, l1+l2 ,loc='lower right')
+ax1.legend(h1+h2, l1+l2, loc='lower right')
 # plt.show()
 st.pyplot(fig)
 
