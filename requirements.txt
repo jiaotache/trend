@@ -1,0 +1,8 @@
+pandas
+datetime
+yfinance
+bottleneck
+matplotlib.pyplot
+japanize_matplotlib
+matplotlib.dates
+streamlit
