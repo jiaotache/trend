@@ -1,6 +1,7 @@
 pandas
 datetime
 yfinance
+yahoofinancials
 bottleneck
 matplotlib
 japanize_matplotlib
