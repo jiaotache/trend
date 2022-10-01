@@ -1,8 +1,7 @@
-pandas
+pandas_datareader
 datetime
-yfinance
-yahoofinancials
 bottleneck
-matplotlib
 japanize_matplotlib
+matplotlib.pyplot
+matplotlib.dates
 streamlit
